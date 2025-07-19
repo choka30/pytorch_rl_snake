@@ -1,0 +1,365 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Sublime Text
+*.sublime-*
+
+# Vim
+*~
+*.swp
+*.swo
+.*.tmp
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Operating Systems
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Machine Learning Specific
+# PyTorch models and checkpoints
+*.pth
+*.pt
+*.ckpt
+checkpoints/
+saved_models/
+model_weights/
+
+# TensorBoard logs
+logs/
+runs/
+tensorboard_logs/
+tb_logs/
+
+# Weights & Biases
+wandb/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# DVC
+.dvc/
+.dvcignore
+
+# Data files (add specific extensions as needed)
+data/raw/
+data/processed/
+data/external/
+*.csv
+*.json
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.parquet
+
+# Large binary files
+*.bin
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Video recordings of gameplay
+videos/
+recordings/
+*.mp4
+*.avi
+*.mov
+*.gif
+
+# Experiment results
+results/
+experiments/
+outputs/
+artifacts/
+
+# Configuration files with secrets
+config/secrets.yaml
+config/local.yaml
+.secrets/
+secrets/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Documentation build
+docs/build/
+site/
+
+# Package files
+*.tgz
+*.tar.gz
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Kubernetes
+*.yaml.bak
+*.yml.bak
+
+# Node.js (if using any JS tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Conda
+.conda/
+
+# Research specific
+papers/
+references/
+literature/
+*.pdf
+
+# Game-specific assets (if any)
+assets/sprites/
+assets/sounds/
+assets/fonts/
+!assets/.gitkeep
+
+# Performance profiling
+*.prof
+*.profile
+.profiling/
+
+# Cache directories
+.cache/
+__pycache__/
+.pytest_cache/
+
+# IDE and editor configs
+.idea/
+.vscode/settings.json
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Cloud storage sync files
+.dropbox
+.dropbox.attr
+.onedrive
+.gdrive
+
+# Backup files
+*.bak
+*.backup
+*.old
+*~
+
+# Local configuration overrides
+local_config.py
+local_settings.py
+
+# API keys and credentials
+.api_keys
+credentials.json
+service_account.json
+
+# Generated documentation
+docs/generated/
+api_docs/
+
+# Virtual environment activation scripts
+activate
+activate.bat
+activate.ps1
+
+# Pytest
+.pytest_cache/
+test_output/
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# Static analysis
+.mypy_cache/
+.pylint.d/
+
+# Profiling output
+*.prof
+*.profile
+
+# Keep important empty directories
+!data/.gitkeep
+!logs/.gitkeep
+!models/.gitkeep
+!results/.gitkeep
+!tests/.gitkeep
