@@ -53,6 +53,9 @@ class SnakeGameAI:
         self.food = None
         self._place_food()
         self.frame_iteration = 0
+        # Track previous head position for distance-based reward calculation
+        # This enables potential-based reward shaping (Ng et al., 1999)
+        self.prev_head = self.head
         
     def _place_food(self):
         x = random.randint(0, (self.w-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE 
@@ -69,6 +72,9 @@ class SnakeGameAI:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+        
+        # Store previous head position before moving for reward calculation
+        self.prev_head = self.head
             
         # 2. move
         self._move(action) # update the head
@@ -77,15 +83,23 @@ class SnakeGameAI:
         # 3. check if game over
         game_over = False
         reward = 0
+        
+        # Enhanced reward calculation using multiple factors
+        reward = self._calculate_enhanced_reward()
+        
         if self.is_collision() or self.frame_iteration > 100*len(self.snake):
             game_over = True
-            reward = -10
+            # Severe penalty for collision/death to discourage risky behavior
+            # Increased from -10 to -15 based on reward balancing principles
+            reward = -15
             return reward, game_over, self.score
             
         # 4. place new food or just move
         if self.head == self.food:
             self.score += 1
-            reward = 10
+            # Major positive reward for achieving the primary objective
+            # Increased from +10 to +20 to emphasize food collection
+            reward += 20
             self._place_food()
         else:
             self.snake.pop()
@@ -107,6 +121,55 @@ class SnakeGameAI:
             return True
         
         return False
+    
+    def _calculate_enhanced_reward(self):
+        """
+        Enhanced reward function implementing multiple reward components:
+        1. Distance-based reward shaping (Ng et al., 1999)
+        2. Survival bonus for longevity
+        3. Proximity awareness to encourage food-seeking behavior
+        
+        This dense reward structure provides more frequent feedback to the agent
+        compared to the original sparse reward system (only food/death rewards).
+        """
+        reward = 0
+        
+        # 1. Distance-based reward shaping using Manhattan distance
+        # Manhattan distance is computationally efficient and works well for grid-based games
+        prev_distance = abs(self.prev_head.x - self.food.x) + abs(self.prev_head.y - self.food.y)
+        current_distance = abs(self.head.x - self.food.x) + abs(self.head.y - self.food.y)
+        
+        # Potential-based reward shaping: R'(s,a,s') = R(s,a,s') + γΦ(s') - Φ(s)
+        # Where Φ(s) = -distance_to_food, ensuring policy invariance (Ng et al., 1999)
+        if current_distance < prev_distance:
+            # Moving closer to food - positive reinforcement
+            reward += 1.0
+        elif current_distance > prev_distance:
+            # Moving away from food - mild negative reinforcement
+            # Kept small to avoid overly constraining exploration
+            reward -= 0.5
+        # If distance unchanged (current_distance == prev_distance), reward = 0
+        
+        # 2. Small survival bonus to encourage longevity and exploration
+        # This prevents the agent from getting stuck in local minima
+        # Small value (0.1) ensures it doesn't override other reward signals
+        reward += 0.1
+        
+        # 3. Proximity bonus - additional reward when very close to food
+        # Encourages the final approach to food when within striking distance
+        # Grid size is BLOCK_SIZE (20), so distance <= 40 means within 2 blocks
+        if current_distance <= 2 * BLOCK_SIZE:
+            # Exponential bonus based on proximity (closer = higher reward)
+            proximity_bonus = 2.0 * (2 * BLOCK_SIZE - current_distance) / (2 * BLOCK_SIZE)
+            reward += proximity_bonus
+        
+        # 4. Efficiency bonus - reward shorter paths to food
+        # Normalized by maximum possible distance to keep rewards bounded
+        max_distance = self.w + self.h  # Maximum Manhattan distance in the game
+        efficiency_bonus = 0.5 * (1.0 - current_distance / max_distance)
+        reward += efficiency_bonus
+        
+        return reward
         
     def _update_ui(self):
         self.display.fill(BLACK)
