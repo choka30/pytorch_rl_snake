@@ -17,7 +17,7 @@ class Agent:
         self.epsilon = 0  # control exploration
         self.gamma = 0.9  # discount rate // smaller gamma means more discounting of future rewards
         self.memory = deque(maxlen=MAX_MEMORY)  # popleft()
-        self.model = Linear_QNet(11, 256, 3)
+        self.model = Linear_QNet(11, 256, 3) # Neural network with 11 inputs, 256 hidden neurons, and 3 outputs
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
@@ -58,6 +58,8 @@ class Agent:
             game.food.x > head.x,  # Food is right
             game.food.y < head.y,  # Food is above
             game.food.y > head.y   # Food is below
+            #(game.food.x - head.x) / game.w,  # Normalized food position relative to head
+            #(game.food.y - head.y) / game.h,  # Normalized food position
         ]
         return np.array(state, dtype=int)
 

@@ -56,14 +56,14 @@ class SnakeGameAI:
         # Track previous head position for distance-based reward calculation
         # This enables potential-based reward shaping (Ng et al., 1999)
         self.prev_head = self.head
-        
+
     def _place_food(self):
         x = random.randint(0, (self.w-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE 
         y = random.randint(0, (self.h-BLOCK_SIZE )//BLOCK_SIZE )*BLOCK_SIZE
         self.food = Point(x, y)
         if self.food in self.snake:
             self._place_food()
-        
+
     def play_step(self, action):
         self.frame_iteration += 1
 
@@ -74,8 +74,7 @@ class SnakeGameAI:
                 quit()
         
         # Store previous head position before moving for reward calculation
-        self.prev_head = self.head
-            
+        self.prev_head = self.head     
         # 2. move
         self._move(action) # update the head
         self.snake.insert(0, self.head)
@@ -84,8 +83,6 @@ class SnakeGameAI:
         game_over = False
         reward = 0
         
-        # Enhanced reward calculation using multiple factors
-        reward = self._calculate_enhanced_reward()
         
         if self.is_collision() or self.frame_iteration > 100*len(self.snake):
             game_over = True
@@ -103,6 +100,8 @@ class SnakeGameAI:
             self._place_food()
         else:
             self.snake.pop()
+            # Enhanced reward calculation using multiple factors
+            reward = self._calculate_enhanced_reward()
         
         # 5. update ui and clock
         self._update_ui()
