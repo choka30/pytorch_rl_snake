@@ -4,7 +4,7 @@ import numpy as np
 from snake_game_ai import SnakeGameAI, Direction, Point, BLOCK_SIZE, SPEED
 from collections import deque
 from model import Linear_QNet, QTrainer
-from helper import plot
+from helper import plot_enhanced, q_tracker
 
 
 MAX_MEMORY = 100_000
@@ -80,14 +80,24 @@ class Agent:
         # random moves: tradeoff exploration / exploitation
         self.epsilon = 80 - self.n_games
         final_move = [0, 0, 0]
+        
+        # Always get Q-values for tracking, regardless of exploration
+        state0 = torch.tensor(state, dtype=torch.float).unsqueeze(0)
+        prediction = self.model(state0)
+        
         if random.randint(0, 200) < self.epsilon:
+            # Exploration: random action
             move = random.randint(0, 2)
             final_move[move] = 1
         else:
-            state0 = torch.tensor(state, dtype=torch.float).unsqueeze(0)
-            prediction = self.model(state0)
+            # Exploitation: best Q-value action
             move = torch.argmax(prediction).item()
             final_move[move] = 1
+        
+        # Track Q-values and action selection for analysis
+        # This enables monitoring of learning progress and action preferences
+        q_tracker.update_q_values(state, prediction, move)
+        
         return final_move
 
 def train():
@@ -132,7 +142,32 @@ def train():
             total_score += score
             mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
-            plot(plot_scores, plot_mean_scores)
+            
+            # Use enhanced plotting with Q-value analysis
+            # Pass current state for real-time Q-value monitoring
+            current_state = agent.get_state(game)
+            plot_enhanced(plot_scores, plot_mean_scores, agent, current_state)
+            
+            # Print additional Q-value statistics every 10 games
+            if agent.n_games % 10 == 0:
+                recent_stats = q_tracker.get_recent_stats(window=100)
+                print(f"\nQ-Value Analysis (Last 100 steps):")
+                for action in range(3):
+                    action_name = ['Straight', 'Right', 'Left'][action]
+                    if f'action_{action}_mean' in recent_stats:
+                        mean_q = recent_stats[f'action_{action}_mean']
+                        std_q = recent_stats[f'action_{action}_std']
+                        print(f"  {action_name}: Mean Q = {mean_q:.3f}, Std = {std_q:.3f}")
+                
+                # Print action distribution
+                total_actions = sum(q_tracker.action_distribution.values())
+                if total_actions > 0:
+                    print(f"Action Distribution:")
+                    for action in range(3):
+                        action_name = ['Straight', 'Right', 'Left'][action]
+                        pct = q_tracker.action_distribution[action] / total_actions * 100
+                        print(f"  {action_name}: {pct:.1f}%")
+                print()
     
 
 if __name__ == "__main__":
